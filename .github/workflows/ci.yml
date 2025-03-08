@@ -36,7 +36,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Run db up migration
-      run: make migrationup
+      run: make migrateup
 
     # Since we already setup Makefile 'make test'
     - name: Test
