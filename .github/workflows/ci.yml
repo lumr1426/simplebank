@@ -9,14 +9,34 @@ on:
 jobs:
 
   test:
+    name: Test
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: simple_bank
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-    - uses: actions/checkout@v4
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.20'
+        go-version: ^1.20
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v4
+
+    - name: Run db up migration
+      run: make migrationup
 
     # Since we already setup Makefile 'make test'
     - name: Test
