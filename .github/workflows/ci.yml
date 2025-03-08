@@ -35,9 +35,16 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v4
 
+    # installs golang-migrate and extracts, then moves binary file to bin folder
+    - name: Install golang-migrate
+      run: |
+        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.2/migrate.linux-amd64.tar.gz | tar xvz
+        sudo mv migrate.linux-amd64 /usr/bin
+        which migrate
+        
     - name: Run db up migration
       run: make migrateup
 
-    # Since we already setup Makefile 'make test'
+    # since we already setup Makefile 'make test'
     - name: Test
       run: make test 
